@@ -1,2 +1,2 @@
-# DL-NLP-Resume-Evaluation
-Deep Learning - Curriculum Vitae matching job description using Natural Language Processing
+# Curriculum Vitae Evaluation
+## Deep Learning - Curriculum Vitae matching job description using Natural Language Processing

@@ -19,13 +19,25 @@ class Folders():
         else:
             folder_empty_flag = False
         return folder_empty_flag   
-        
+    
+    def get_all_files(self):
+        return os.listdir(self.folderName)
+            
     def get_all_pdf_files(self):
-        list = os.listdir(self.folderName)
+        list = self.get_all_files()
         for file in list:
             if not file.endswith(".pdf"):
                 list.remove(file)        
         return list
+    
+    def remove_file(self, filename):
+        os.remove(filename)
+        
+    def remove_all_files(self):
+        list = self.get_all_files()
+        for f in list:
+            if f.endswith(".pdf"):
+                self.remove_file(self.folderName + "/" + f)
             
         
 class Files():
