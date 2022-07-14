@@ -1,7 +1,7 @@
 import shutil, os
 from default_settings import *
-from reader import Files, Folders, PDFfiles, TXTfiles
-from nlp import NLP
+from src.reader import Files, Folders, PDFfiles, TXTfiles
+from src.nlp import NLP
 
 
 def header():
@@ -57,7 +57,7 @@ def main():
             else:
                 continue
         
-        # on enter continues execution
+        # on key pressed continues execution
         inp = input("\nPress enter to run...")
         if inp == 'q' or inp == 'Q':
             break
@@ -69,13 +69,13 @@ def main():
         # get all cv pdf files and iterate individually
         resumes_list = cv_folder.get_all_pdf_files() 
         for resume_file in resumes_list:          
-#             print("\n", resume_file)
             # get pdf file text as string
             resume_context = PDFfiles(DEFAULT_FOLDER + "/" + resume_file).read()
-#             print(resume_context)
             
+            # apply nlp model and get resulting score
             m = NLP(job_descr_context, resume_context)
             score = m.get_fit_score()
+            # apply keyword tool to get keywords from cv            
             keywords = m.get_keywords(resume_context)
             
             # store results 
@@ -92,7 +92,7 @@ def main():
         for res in best_results:
             shutil.copyfile(DEFAULT_FOLDER + "/" + res['filename'], DEFAULT_RESULTS + "/" + res['filename'])    
          
-        print("\nThe " + str(DEFAULT_SCORE) + " best matching CVs are available in /results directory.")      
+        print("\nExecution completed. The " + str(DEFAULT_SCORE) + " best matching CVs are available in /results directory.\n\n")      
         break
     
     
