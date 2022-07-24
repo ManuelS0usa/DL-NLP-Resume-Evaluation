@@ -41,7 +41,7 @@ class Folders():
     def remove_all_files(self):
         list = self.get_all_files()
         for f in list:
-            if f.endswith(".pdf"):
+            if f.endswith(".pdf") or f.endswith(".jpg"):
                 self.remove_file(self.folderName + "/" + f)
             
         
@@ -110,7 +110,7 @@ class PDFfiles(Files):
             # load it to PIL
             image = Image.open(io.BytesIO(image_bytes))
             # save it to local disk
-            image.save(open(f"./opencv_images/1_" + imageName, "wb"))
+            image.save(open(f"./" + DEFAULT_OPENCV_FOLDER + "/1_" + imageName, "wb"))
             
 
 

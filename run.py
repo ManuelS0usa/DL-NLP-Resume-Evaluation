@@ -3,47 +3,27 @@ from default_settings import *
 from src.reader import Files, Folders, PDFfiles, TXTfiles
 from src.nlp import NLP
 from src.cv import Image
-
-# import matplotlib.pyplot as plt
-# from matplotlib import pyplot as plt
-# from matplotlib import image as mpimg
- 
-# import cv2
-# import sys
-
-
-def header():
-    print("\n##########################################################")
-    print("##\t\tCurriculum Vitae Evaluator Tool\t\t##")
-    print("##########################################################")
-
-    
-def instructions():
-    print("\nPlease, follow the instructions below...\n")
-    print("\t1. Write job description into job_description.txt file;")
-    print("\t2. Import resumes(CVs) pdf files into /cv directory;")    
-    print("\t3. Press Enter key to continue or [q] key to exit.")
-    
-    
-def clear_console():
-    os.system("clear")
+from src.console import _Print, clear_console
 
     
 def main():
+    _print = _Print()
     running = True
     cv_folder = Folders(DEFAULT_FOLDER)
     results_folder = Folders(DEFAULT_RESULTS)
     job_descr = TXTfiles(DEFAULT_FILE)
+    opencv_folder = Folders(DEFAULT_OPENCV_FOLDER)
     
     # check if necessary file & folders exist otherwise create
     cv_folder.verify()
     job_descr.verify()  
     results_folder.verify()    
-        
-#     clear_console()    
+    opencv_folder.verify()
+       
+#     _print.clear_console()    
     # prints some text in console
-    header()    
-    instructions()
+    _print.header()    
+    _print.instructions()
         
     while running:
         
@@ -94,25 +74,26 @@ def main():
         best_results = results[:DEFAULT_SCORE]
 #         print(best_results)
         
-        # clear results folder
-        results_folder.remove_all_files()        
-                
-        print("\n## RESULTS ##")
-        i = 1
-        # copy best resumes to results folder
+        # clear folders
+        results_folder.remove_all_files() 
+        opencv_folder.remove_all_files() 
+             
+        # copy best resumes to results folder, print results and detect candidates face on CV
+        print("\n## RESULTS ##")    
+        i = 1       
         for res in best_results:
-            shutil.copyfile(DEFAULT_FOLDER + "/" + res['filename'], DEFAULT_RESULTS + "/" + res['filename'])              
-            imageName = res['filename'].replace(".pdf", "") + ".jpg"
             
+            # Copy best resumes to /results folder
+            shutil.copyfile(DEFAULT_FOLDER + "/" + res['filename'], DEFAULT_RESULTS + "/" + res['filename'])              
+            
+            imageName = res['filename'].replace(".pdf", "") + ".jpg"            
             # PDF crop photo image
             PDFfiles(DEFAULT_FOLDER + "/" + res['filename']).save_photo_image(imageName)            
             # Face detect and save    
             Image(imageName).detect()
             
-            print("\n\n RESUME #" + str(i))
-            print("\nFILE NAME:", res['filename'])
-            print("SCORE:", res['score'])
-            print("KEYWORDS:", res['keywords'])
+            # Show results on console
+            _print.results(i, res['filename'], res['score'], res['keywords'])            
             i+=1       
             
         print("\nExecution completed. The " + str(DEFAULT_SCORE) + " best matching CVs are available in /results directory.\n\n")      
