@@ -12,7 +12,7 @@
 
 ### Decription
 This project was executed in order to apply deep learning techniques learned in classes and in a way mix them in a project format whose concept would enable to explore both areas of natural language processing and computer vision.
-The work developed stands out as a program that selects the curriculum vitaes with the best match classification according to a job announcement description. Simultaneously, the keywords present in the best resumes are analyzed and the faces of each candidate are detected in their own curriculum vitae.
+The work developed stands out as a program that selects the curriculum vitaes with the best match classification according to a job announcement description. Furthermore, the keywords present in the best resumes are analyzed and the faces of each candidate are detected in their own curriculum vitae.
 
 
 ### Before running, please install all required dependencies using the command on CMD console:
