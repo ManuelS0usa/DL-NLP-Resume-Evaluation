@@ -2,6 +2,14 @@ import shutil, os
 from default_settings import *
 from src.reader import Files, Folders, PDFfiles, TXTfiles
 from src.nlp import NLP
+from src.cv import Image
+
+# import matplotlib.pyplot as plt
+# from matplotlib import pyplot as plt
+# from matplotlib import image as mpimg
+ 
+# import cv2
+# import sys
 
 
 def header():
@@ -52,7 +60,7 @@ def main():
         folder_empty = cv_folder.is_empty()           
         if folder_empty:
             l2 = input("\nPlease, import resumes(CVs) pdf files into /cv directory and press enter to continue...") 
-            if l2 == 'q' or l == 'Q':
+            if l2 == 'q' or l2 == 'Q':
                 break
             else:
                 continue
@@ -63,7 +71,7 @@ def main():
             break
         
         # get txt file text as string
-        job_descr_context = job_descr.read()
+        job_descr_context = job_descr.read()        
         
         results = []
         # get all cv pdf files and iterate individually
@@ -88,10 +96,25 @@ def main():
         
         # clear results folder
         results_folder.remove_all_files()        
+                
+        print("\n## RESULTS ##")
+        i = 1
         # copy best resumes to results folder
         for res in best_results:
-            shutil.copyfile(DEFAULT_FOLDER + "/" + res['filename'], DEFAULT_RESULTS + "/" + res['filename'])    
-         
+            shutil.copyfile(DEFAULT_FOLDER + "/" + res['filename'], DEFAULT_RESULTS + "/" + res['filename'])              
+            imageName = res['filename'].replace(".pdf", "") + ".jpg"
+            
+            # PDF crop photo image
+            PDFfiles(DEFAULT_FOLDER + "/" + res['filename']).save_photo_image(imageName)            
+            # Face detect and save    
+            Image(imageName).detect()
+            
+            print("\n\n RESUME #" + str(i))
+            print("\nFILE NAME:", res['filename'])
+            print("SCORE:", res['score'])
+            print("KEYWORDS:", res['keywords'])
+            i+=1       
+            
         print("\nExecution completed. The " + str(DEFAULT_SCORE) + " best matching CVs are available in /results directory.\n\n")      
         break
     

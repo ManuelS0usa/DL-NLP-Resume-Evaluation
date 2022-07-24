@@ -1,3 +1,7 @@
 sklearn
 gensim==3.8.3
 PyPDF2
+transformers
+langdetect
+opencv-python
+pdf2image

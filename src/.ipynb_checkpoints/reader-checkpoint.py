@@ -1,6 +1,11 @@
 import os
 import PyPDF2
-
+from pdf2image import convert_from_path
+from default_settings import *
+import fitz # PyMuPDF
+import io
+from PIL import Image
+     
 
 class Folders():
     """ class to handle folders """
@@ -85,5 +90,28 @@ class PDFfiles(Files):
         pageObj = pdfReader.getPage(0)
         context = pageObj.extractText()
         return context
+    
+    def save_photo_image(self, imageName):
+        # open the file
+        pdf_file = fitz.open(self.fileName)    
+            
+        # get the page itself
+        page = pdf_file[0]
+        image_list = page.get_images()
+            
+        for image_index, img in enumerate(page.get_images(), start=1):
+            # get the XREF of the image
+            xref = img[0]
+            # extract the image bytes
+            base_image = pdf_file.extract_image(xref)
+            image_bytes = base_image["image"]
+            # get the image extension
+            image_ext = base_image["ext"]
+            # load it to PIL
+            image = Image.open(io.BytesIO(image_bytes))
+            # save it to local disk
+            image.save(open(f"./opencv_images/1_" + imageName, "wb"))
+            
+
 
             
